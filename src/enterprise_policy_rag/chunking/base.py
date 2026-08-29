@@ -72,4 +72,4 @@ def markdown_chunker(text, chunk_size=1000, chunk_overlap=200):
     # Then, the recursive character splitter will further split those sections into chunks of the specified size with overlap.
     markdown_docs = markdown_splitter.split_text(text)
     docs = splitter.split_documents(markdown_docs)
-    return [doc.page_content for doc in docs]
+    return docs
