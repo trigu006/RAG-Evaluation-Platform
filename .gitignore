@@ -6,3 +6,6 @@ env/
 
 # Environment variables
 .env
+
+# Persisted vector data store
+data/chroma/
