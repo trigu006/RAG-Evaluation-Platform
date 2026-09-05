@@ -71,5 +71,4 @@ def markdown_chunker(text, chunk_size=1000, chunk_overlap=200):
     # The markdown splitter will create documents and extract the metadata for each section based on the headers.
     # Then, the recursive character splitter will further split those sections into chunks of the specified size with overlap.
     markdown_docs = markdown_splitter.split_text(text)
-    docs = splitter.split_documents(markdown_docs)
-    return docs
+    return splitter.split_documents(markdown_docs)
