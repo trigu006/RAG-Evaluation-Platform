@@ -1,4 +1,4 @@
-test_cases = [
+TEST_CASES = [
     {
         "question": "How many months of parental leave do we have?",
         "section_title": "3. Duration",
@@ -24,5 +24,64 @@ test_cases = [
         "section_title": "4. Company Holidays",
         "answer": "10 days"
     },
-    
+    {
+        "question": "What is the maximum number of unused PTO days that can be carried over from one calendar year to the next at Northstar Analytics, Inc.?",
+        "section_title": "2. Paid Time Off",
+        "answer": "5 days"
+    },
+    {
+        "question": "How many paid working days following the death of an immediate family member can full-time employees at Northstar Analytics, Inc. receive for bereavement leave?",
+        "section_title": "5. Bereavement Leave",
+        "answer": "Up to 5 days"
+    },
+    {
+        "question": "What is the maximum reimbursement amount for approved education expenses under Northstar Analytics, Inc.'s tuition assistance program?",
+        "section_title": "9. Tuition Assistance",
+        "answer": "Up to $5,000 per calendar year"
+    },
+    {
+        "question": "What is the required grade for an employee to receive tuition reimbursement at Northstar Analytics, Inc.?",
+        "section_title": "9. Tuition Assistance",
+        "answer": "A grade of B or higher, or a passing grade for a pass/fail course."
+    },
+    {
+        "question": "How many floating holidays per calendar year are full-time employees at Northstar Analytics, Inc. entitled to?",
+        "section_title": "4. Company Holidays",
+        "answer": "Two floating holidays per calendar year"
+    },
+    {
+        "question": "What happens to an employee's vested account balance upon termination of employment?",
+        "section_title": "8. Termination of Employment",
+        "answer": "A participant's vested account balance remains the participant's property upon termination."
+    },
+    {
+        "question": "What is the minimum loan amount an employee can have under the Northstar Analytics 401(k) Plan?",
+        "section_title": "6. Plan Loans",
+        "answer": "The minimum loan amount is $1,000."
+    },
+    {
+        "question": "What happens to employee contributions that exceed 5% of eligible compensation?",
+        "section_title": "4. Employer Matching Contribution",
+        "answer": "No matching contribution is provided for employee contributions exceeding 5% of eligible compensation."
+    },
+    {
+        "question": "How much notice should an employee provide when the need for leave is foreseeable?",
+        "section_title": "9. Notice",
+        "answer": "At least 30 days' notice"
+    },
+    {
+        "question": "Are bonuses, commissions, and overtime included in the calculation of parental-leave pay?",
+        "section_title": "4. Compensation",
+        "answer": "No, they are not included."
+    },
+    {
+        "question": "What percentage of an employee's regular base salary is paid during Northstar's paid parental leave?",
+        "section_title": "4. Compensation",
+        "answer": "100% of the employee's regular base salary"
+    },
+    {
+        "question": "What is the eligibility criterion for Northstar's paid parental leave?",
+        "section_title": "1. Eligibility",
+        "answer": "Full-time employees become eligible after completing six continuous months of employment."
+    }
 ]
