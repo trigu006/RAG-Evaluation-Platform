@@ -1,5 +1,5 @@
 from .questions import TEST_CASES
-from .retrieval import hit_at_k_section, mrr
+from .retrieval import hit_at_k_section, mrr, semantic_answer_sufficiency_at_k
 from .retriever_config import RETRIEVER_CONFIGS
 from src.enterprise_policy_rag.retrieval.retriever import create_retriever
 
@@ -25,6 +25,7 @@ def evaluate_retriever_configs(vector_store):
         # Evaluate hit@k and MRR
         hit_at_k_score, hit_at_k_records = hit_at_k_section(TEST_CASES, retriever)
         mrr_score, mrr_records = mrr(TEST_CASES, retriever)
+        semantic_answer_sufficiency_score, semantic_answer_sufficiency_records = semantic_answer_sufficiency_at_k(TEST_CASES, retriever)
 
         # Store the results
         results[retriever_name] = {
@@ -35,6 +36,10 @@ def evaluate_retriever_configs(vector_store):
             "mrr": {
                 "score": mrr_score,
                 "records": mrr_records
+            },
+            "semantic_answer_sufficiency": {
+                "score": semantic_answer_sufficiency_score,
+                "records": semantic_answer_sufficiency_records
             }
         }
 
