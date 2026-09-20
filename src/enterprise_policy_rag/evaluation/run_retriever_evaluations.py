@@ -27,21 +27,6 @@ def evaluate_retriever_configs(vector_store):
         mrr_score, mrr_records = mrr(TEST_CASES, retriever)
         semantic_answer_sufficiency_score, semantic_answer_sufficiency_records = semantic_answer_sufficiency_at_k(TEST_CASES, retriever)
 
-        # Store the results
-        # results[retriever_name] = {
-        #     "hit_at_k": {
-        #         "score": hit_at_k_score,
-        #         "records": hit_at_k_records
-        #     },
-        #     "mrr": {
-        #         "score": mrr_score,
-        #         "records": mrr_records
-        #     },
-        #     "semantic_answer_sufficiency": {
-        #         "score": semantic_answer_sufficiency_score,
-        #         "records": semantic_answer_sufficiency_records
-        #     }
-        # }
         records = []
 
         for question in TEST_CASES:
