@@ -56,23 +56,22 @@ def select_best_config(results, k_threshold = 0.8):
     deltas = _calculate_deltas(results, best_config)
 
     for config_name, deltas_config in deltas.items():
-        if (deltas[config_name]['headroom_normalized']['hit_at_k'] <= MAX_TRIVIAL_HIT_GAIN
-            and deltas[config_name]['headroom_normalized']['mrr'] <= MAX_TRIVIAL_SAS_GAIN
+        if (deltas[config_name]['absolute']['k_difference'] > 0
+            and deltas[config_name]['headroom_normalized']['hit_at_k'] <= MAX_TRIVIAL_HIT_GAIN
+            and deltas[config_name]['headroom_normalized']['mrr'] <= MAX_TRIVIAL_MRR_GAIN
             and deltas[config_name]['headroom_normalized']['semantic_answer_sufficiency'] <= MAX_TRIVIAL_SAS_GAIN):
             best_config = {
                 "name": config_name,
                 "scores": results[config_name]["overall_scores"],
                 "individual_scores": {
-                    "hit_at_k": config_results["overall_scores"]["hit_at_k"],
-                    "mrr": config_results["overall_scores"]["mrr"],
-                    "semantic_answer_sufficiency": config_results["overall_scores"]["semantic_answer_sufficiency"]
+                    "hit_at_k": results[config_name]["overall_scores"]["hit_at_k"],
+                    "mrr": results[config_name]["overall_scores"]["mrr"],
+                    "semantic_answer_sufficiency": results[config_name]["overall_scores"]["semantic_answer_sufficiency"]
                 },
-                "records": config_results["records"]
+                "records": results[config_name]["records"]
             }
 
-    # return best_config
     return best_config, deltas
-    # return best_config, calculate_deltas(results, best_config)
 
 def _calculate_deltas(results, best_config):
     """
@@ -96,13 +95,14 @@ def _calculate_deltas(results, best_config):
 
         # Calculate the difference in scores for each metric
         deltas[config_name ]['absolute'] = {
-            metric: config_results["overall_scores"][metric] - best_config["scores"][metric]
+            # metric: config_results["overall_scores"][metric] - best_config["scores"][metric]
+            metric: best_config["scores"][metric] -config_results["overall_scores"][metric]
             for metric in best_config["scores"]
         }
 
         # Calculate the normalized difference in scores for each metric relative to remaining improvement potential (1 - best score)
         deltas[config_name]['headroom_normalized'] = {
-            metric: -(deltas[config_name]['absolute'][metric] / (1 - config_results["overall_scores"][metric])) if 1 - config_results["overall_scores"][metric] != 0 else 0
+            metric: deltas[config_name]['absolute'][metric] / (1 - config_results["overall_scores"][metric]) if 1 - config_results["overall_scores"][metric] != 0 else 0
             for metric in best_config["scores"]
         }
 
