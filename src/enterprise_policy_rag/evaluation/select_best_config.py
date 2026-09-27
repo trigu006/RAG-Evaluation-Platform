@@ -17,6 +17,7 @@ def select_best_config(results, k_threshold = 0.8):
 
     Args:
         results (dict): A dictionary containing the evaluation results for each retriever configuration.
+        k_threshold (float): The minimum hit@k score required for a configuration to be considered. Defaults to 0.8.
 
     Returns:
         dict: A dictionary containing the best retriever configuration and its corresponding scores.
@@ -52,7 +53,7 @@ def select_best_config(results, k_threshold = 0.8):
     if best_config is None:
         raise ValueError("No configuration met the specified Hit@K threshold.")
 
-    deltas = calculate_deltas(results, best_config)
+    deltas = _calculate_deltas(results, best_config)
 
     for config_name, deltas_config in deltas.items():
         if (deltas[config_name]['headroom_normalized']['hit_at_k'] <= MAX_TRIVIAL_HIT_GAIN
@@ -73,7 +74,7 @@ def select_best_config(results, k_threshold = 0.8):
     return best_config, deltas
     # return best_config, calculate_deltas(results, best_config)
 
-def calculate_deltas(results, best_config):
+def _calculate_deltas(results, best_config):
     """
     Calculates the difference in scores between each configuration and the best configuration.
 
