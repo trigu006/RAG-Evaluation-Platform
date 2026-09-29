@@ -73,7 +73,7 @@ def select_best_config(results, k_threshold = 0.8):
                 "records": results[config_name]["records"]
             })
 
-    # Need to select the best configuration from the eligible ones based on the smallest absolute K difference
+    # Need to select the best configuration from the eligible ones based on the largest absolute K difference
     if eligible_configs:
         for i in range(len(eligible_configs)):
             if i == 0:
