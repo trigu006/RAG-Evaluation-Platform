@@ -55,12 +55,14 @@ def select_best_config(results, k_threshold = 0.8):
 
     deltas = _calculate_deltas(results, best_config)
 
+    eligible_configs = []
+
     for config_name, deltas_config in deltas.items():
         if (deltas[config_name]['absolute']['k_difference'] > 0
             and deltas[config_name]['headroom_normalized']['hit_at_k'] <= MAX_TRIVIAL_HIT_GAIN
             and deltas[config_name]['headroom_normalized']['mrr'] <= MAX_TRIVIAL_MRR_GAIN
             and deltas[config_name]['headroom_normalized']['semantic_answer_sufficiency'] <= MAX_TRIVIAL_SAS_GAIN):
-            best_config = {
+            eligible_configs.append({
                 "name": config_name,
                 "scores": results[config_name]["overall_scores"],
                 "individual_scores": {
@@ -69,7 +71,14 @@ def select_best_config(results, k_threshold = 0.8):
                     "semantic_answer_sufficiency": results[config_name]["overall_scores"]["semantic_answer_sufficiency"]
                 },
                 "records": results[config_name]["records"]
-            }
+            })
+
+    # Need to select the best configuration from the eligible ones based on the smallest absolute K difference
+    if eligible_configs:
+        best_config = min(
+            eligible_configs,
+            key=lambda config_name: RETRIEVER_CONFIGS[config_name]['k']
+        )
 
     return best_config, deltas
 
