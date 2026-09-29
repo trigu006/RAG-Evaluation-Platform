@@ -75,10 +75,13 @@ def select_best_config(results, k_threshold = 0.8):
 
     # Need to select the best configuration from the eligible ones based on the smallest absolute K difference
     if eligible_configs:
-        best_config = min(
-            eligible_configs,
-            key=lambda config_name: RETRIEVER_CONFIGS[config_name]['k']
-        )
+        for i in range(len(eligible_configs)):
+            if i == 0:
+                best_eligible_config = eligible_configs[i]
+            else:
+                if deltas[best_eligible_config['name']]['absolute']['k_difference'] < deltas[eligible_configs[i]['name']]['absolute']['k_difference']:
+                    best_eligible_config = eligible_configs[i]
+        best_config = best_eligible_config
 
     return best_config, deltas
 
