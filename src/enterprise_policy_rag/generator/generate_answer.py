@@ -17,7 +17,11 @@ def generate_answer(retriever, generator, question):
 
     # Break 'sections' down into a single string
     # NEED TO FIX: Currently, the iteration of sections is composed of 'Document' types, resulting in an error.
-    sections_string = "\n".join(sections)
+    sections_string = []
+    for section in sections:
+        sections_string.append(str(section.model_dump_json()))
+    sections_string = "\n\n".join(sections_string)
+    # sections_string = "\n".join(sections)
 
     # Create the prompt template for the LLM (generator)
     prompt = ChatPromptTemplate.from_messages([
