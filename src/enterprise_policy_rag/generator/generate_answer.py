@@ -17,7 +17,6 @@ def generate_answer(retriever, generator, question):
     sections = retriever.invoke(question)
 
     # Break 'sections' down into a single string
-    # NEED TO FIX: Currently, the iteration of sections is composed of 'Document' types, resulting in an error.
     sections_string = []
     #for section in sections:
     #    sections_string.append(str(section.model_dump_json()))
@@ -37,4 +36,4 @@ def generate_answer(retriever, generator, question):
     chain = prompt | generator
 
     response = chain.invoke({'context': sections_string, 'question': question})
-    return response
+    return response.content
