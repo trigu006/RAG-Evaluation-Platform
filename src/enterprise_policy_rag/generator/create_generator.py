@@ -9,6 +9,8 @@ def create_generator(model, temperature: float =0.0, **kwargs):
     Create a generator instance for answering questions based on retrieved information.
     """
 
-    llm = ChatOllama(model=model, temperature=temperature)
+    llm = ChatOllama(model=model,
+                     temperature=temperature,
+                     **kwargs)
 
     return llm

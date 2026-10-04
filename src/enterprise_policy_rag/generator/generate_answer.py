@@ -3,6 +3,7 @@
 """
 
 from langchain_core.prompts import ChatPromptTemplate
+from .system_prompt import SYSTEM_PROMPT
 
 def generate_answer(retriever, generator, question):
     """
@@ -18,14 +19,18 @@ def generate_answer(retriever, generator, question):
     # Break 'sections' down into a single string
     # NEED TO FIX: Currently, the iteration of sections is composed of 'Document' types, resulting in an error.
     sections_string = []
-    for section in sections:
-        sections_string.append(str(section.model_dump_json()))
-    sections_string = "\n\n".join(sections_string)
-    # sections_string = "\n".join(sections)
+    #for section in sections:
+    #    sections_string.append(str(section.model_dump_json()))
+    #sections_string = "\n\n".join(sections_string)
+    sections_string = "\n\n".join(
+        f"Section: {section.metadata.get('section_title', 'Unknown')}\n"
+        f"{section.page_content}"
+        for section in sections
+        )
 
     # Create the prompt template for the LLM (generator)
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a helpful assistant."),
+        ("system", SYSTEM_PROMPT),
         ("user", "Context: {context}\n\nQuestion: {question}")
     ])
 
