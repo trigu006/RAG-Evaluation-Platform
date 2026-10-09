@@ -13,14 +13,10 @@ def generate_answer(sections, generator, question):
         • Generator: the language model for generating answers
         • Question: the question or message from the user
     """
-    # Call the retriever to procure the sections that are relevant to the user's question
-    # sections = retriever.invoke(question)
 
     # Break 'sections' down into a single string
     sections_string = []
-    #for section in sections:
-    #    sections_string.append(str(section.model_dump_json()))
-    #sections_string = "\n\n".join(sections_string)
+
     sections_string = "\n\n".join(
         f"Section: {section.metadata.get('section_title', 'Unknown')}\n"
         f"{section.page_content}"
