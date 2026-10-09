@@ -15,7 +15,11 @@ def run_generator_evaluations(retriever, generator, questions):
     results = []
 
     for question in questions:
-        answer = generate_answer(retriever, generator, question['question'])
-        results.append({'id': question['id'],'question': question['question'], 'answer': answer})
+        # Refactored to pass the sections
+        sections = retriever.invoke(question['question'])
+        
+        # answer = generate_answer(retriever, generator, question['question'])
+        answer = generate_answer(sections, generator, question['question'])
+        results.append({'id': question['id'],'question': question['question'], 'answer': answer, 'sections': sections})
         
     return results

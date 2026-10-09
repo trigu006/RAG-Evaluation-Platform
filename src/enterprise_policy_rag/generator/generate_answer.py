@@ -5,16 +5,16 @@
 from langchain_core.prompts import ChatPromptTemplate
 from .system_prompt import SYSTEM_PROMPT
 
-def generate_answer(retriever, generator, question):
+def generate_answer(sections, generator, question):
     """
         Generate an answer based on the retrieved information.
         Inputs:
-        • Retriever: the RAG retriever to the vector database
+        • Sections: the retrieved sections from the vector database
         • Generator: the language model for generating answers
         • Question: the question or message from the user
     """
     # Call the retriever to procure the sections that are relevant to the user's question
-    sections = retriever.invoke(question)
+    # sections = retriever.invoke(question)
 
     # Break 'sections' down into a single string
     sections_string = []
