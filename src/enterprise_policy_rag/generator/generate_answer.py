@@ -4,6 +4,7 @@
 
 from langchain_core.prompts import ChatPromptTemplate
 from .system_prompt import SYSTEM_PROMPT
+from .answer_class import GeneratedAnswer
 
 def generate_answer(sections, generator, question):
     """
@@ -29,7 +30,9 @@ def generate_answer(sections, generator, question):
         ("user", "Context: {context}\n\nQuestion: {question}")
     ])
 
-    chain = prompt | generator
+    structured_generator = generator.with_structured_output(GeneratedAnswer, method='json_schema')
+
+    chain = prompt | structured_generator
 
     response = chain.invoke({'context': sections_string, 'question': question})
-    return response.content
+    return {'answer': response.answer, 'answerable': response.answerable}
