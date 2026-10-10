@@ -121,22 +121,28 @@ TEST_CASES = [
     {
         "id": "pets_018",
         "question": "Can I bring my pet to work?",
-        "section_title": "None",
+        # "section_title": "None",
+        "section_title": None,
         "answer": "No answer available",
+        #"answer": None,
         "answerable": False
     },
     {
         "id": "food_019",
         "question": "Are there complementary food and beverages provided in the workplace?",
-        "section_title": "None",
+        # "section_title": "None",
+        "section_title": None,
         "answer": "No answer available",
+        #"answer": None,
         "answerable": False
     },
     {
         "id": "food_020",
         "question": "Can I bring my own mini fridge to the workplace?",
-        "section_title": "None",
+        # "section_title": "None",
+        "section_title": None,
         "answer": "No answer available",
+        #"answer": None,
         "answerable": False
     }
 ]
