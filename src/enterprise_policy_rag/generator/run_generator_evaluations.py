@@ -24,23 +24,14 @@ def run_generator_evaluations(retriever, generator, questions):
         results.append({'id': question['id'],
                         'question': question['question'],
                         'answer': response['answer'],
-                        'answerable': response['answerable'],
+                        'predicted_answerable': response['answerable'],
                         'expected_answerable': question['answerable'],
                         'sections': sections})
 
     scores = {}
-    # answerability_score = 0
+    answerability_score = 0
 
-    answerability_score = sum(1 for result in results if result['answerable'] == result['expected_answerable'])
-
-    # Commence evaluation of the generated answers
-    # for result in results:
-    #     id = result['id']
-    #     for question in questions:
-    #         if question['id'] == id:
-    #             if result['answerable'] == question['answerable']:
-    #                 answerability_score += 1
-    #             break
+    answerability_score = sum(1 for result in results if result['predicted_answerable'] == result['expected_answerable'])
 
     scores['answerability_accuracy'] = round(answerability_score / len(results), 3) if len(questions) > 0 else 0
 
