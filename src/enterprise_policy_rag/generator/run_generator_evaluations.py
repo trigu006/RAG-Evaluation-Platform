@@ -24,7 +24,7 @@ def run_generator_evaluations(retriever, generator, questions):
         results.append({'id': question['id'], 'question': question['question'], 'answer': response['answer'], 'answerable': response['answerable'], 'sections': sections})
 
     scores = {}
-    attestation = 0
+    answerability_score = 0
 
     # Commence evaluation of the generated answers
     for result in results:
@@ -32,9 +32,9 @@ def run_generator_evaluations(retriever, generator, questions):
         for question in questions:
             if question['id'] == id:
                 if result['answerable'] == question['answerable']:
-                    attestation += 1
+                    answerability_score += 1
                 break
 
-    scores['attestation'] = round(attestation / len(results), 3) if len(questions) > 0 else 0
+    scores['answerability_accuracy'] = round(answerability_score / len(results), 3) if len(questions) > 0 else 0
 
     return results, scores
