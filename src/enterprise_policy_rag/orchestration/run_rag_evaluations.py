@@ -1,5 +1,4 @@
 from src.enterprise_policy_rag.generator.generate_answer import generate_answer
-from langchain_chroma.vectorstores import cosine_similarity
 
 THRESHOLD = 0.8
 
@@ -59,7 +58,9 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
                         'reciprocal_rank': reciprocal_rank,
                         'sections': sections})
 
-    return results
+    scores = _compute_rag_metrics(results)
+
+    return results, scores
 
 def _compute_rag_metrics(results):
     """
@@ -70,4 +71,22 @@ def _compute_rag_metrics(results):
     Returns:
         dict: A dictionary containing the computed evaluation metrics for the RAG system.
     """
-    pass
+    scores = {}
+
+    # Compute answerability accuracy
+    answerability_score = sum(1 for result in results if result['predicted_answerable'] == result['expected_answerable'])
+    scores['answerability_accuracy'] = round(answerability_score / len(results), 3)
+
+    # Compute Hit@K accuracy
+    hit_at_k_score = sum(result['hit_at_k_score'] for result in results)
+    scores['hit_at_k_accuracy'] = round(hit_at_k_score / len(results), 3)
+
+    # Compute Mean Reciprocal Rank (MRR)
+    total_reciprocal_rank = sum(result['reciprocal_rank'] for result in results)
+    scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len(results), 3)
+
+    # Compute semantic answer sufficiency at K
+    total_hits = sum(result['hit'] for result in results)
+    scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(results), 3)
+
+    return scores
