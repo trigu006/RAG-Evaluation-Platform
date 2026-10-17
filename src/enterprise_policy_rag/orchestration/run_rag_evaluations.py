@@ -70,6 +70,7 @@ def _compute_rag_metrics(results):
         dict: A dictionary containing the computed evaluation metrics for the RAG system.
     """
     scores = {}
+    answerable_results = [result for result in results if result['hit_at_k_score'] is not None and result['reciprocal_rank'] is not None]
 
     # Compute answerability accuracy
     answerability_score = sum(1 for result in results if result['predicted_answerable'] == result['expected_answerable'])
@@ -77,11 +78,11 @@ def _compute_rag_metrics(results):
 
     # Compute Hit@K accuracy
     hit_at_k_score = sum(result['hit_at_k_score'] for result in results if result['hit_at_k_score'] is not None)
-    scores['hit_at_k_accuracy'] = round(hit_at_k_score / len([r for r in results if r['hit_at_k_score'] is not None]), 3)
+    scores['hit_at_k_accuracy'] = round(hit_at_k_score / len(answerable_results), 3)
 
     # Compute Mean Reciprocal Rank (MRR)
     total_reciprocal_rank = sum(result['reciprocal_rank'] for result in results if result['reciprocal_rank'] is not None)
-    scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len([r for r in results if r['reciprocal_rank'] is not None]), 3)
+    scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len(answerable_results), 3)
 
     # Compute semantic answer sufficiency at K
     total_hits = sum(result['hit'] for result in results)
