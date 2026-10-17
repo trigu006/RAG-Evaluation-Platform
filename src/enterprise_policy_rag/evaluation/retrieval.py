@@ -119,3 +119,41 @@ def semantic_answer_sufficiency_at_k(questions: list, retriever, embedding_model
             })
 
     return (total_hits / len(questions) if len(questions) > 0 else 0.0, records)
+
+# SECTION FOR FUTURE REFACTORING
+def hit_at_k(sections, question) -> int:
+    """
+    Computes the hit@k metric, given a single question and set of sections forom the retriever
+
+    Args:
+        sections (list): A list of sections retrieved for the question.
+        question (dict): A question dictionary containing an 'id' and 'section_title' key.
+
+    Returns:
+        int: The hit@k score.
+    """
+    section_titles = [section.metadata.get('section_title') for section in sections]
+
+    if question["section_title"] in section_titles:
+        return 1
+    else:
+        return 0
+
+def mrr_(sections, question) -> float:
+    """
+    Computes the Mean Reciprocal Rank (MRR) metric, given a single question and set of sections from the retriever.
+
+    Args:
+        sections (list): A list of sections retrieved for the question.
+        question (dict): A question dictionary containing an 'id' and 'section_title' key.
+
+    Returns:
+        float: The MRR score.
+    """
+    section_titles = [section.metadata.get('section_title') for section in sections]
+
+    if question["section_title"] in section_titles:
+        rank = section_titles.index(question["section_title"]) + 1  # +1 because index is 0-based
+        return 1 / rank
+    else:
+        return 0.0
