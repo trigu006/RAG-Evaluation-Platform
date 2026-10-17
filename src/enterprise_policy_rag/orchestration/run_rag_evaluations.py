@@ -35,19 +35,14 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
         best_score = max(cos_sim, default=0.0)
         hit = int(best_score >= THRESHOLD)  # Using the provided threshold for sufficiency
 
-        # section_titles = [section.metadata.get('section_title') for section in sections]
-
-        # Hit@K
-        # hit_at_k_score = 1 if question['section_title'] in section_titles else 0
-        hit_at_k_score = hit_at_k(sections, question)  # Use the refactored hit_at_k function
-
-        # MRR
-        # if hit_at_k_score == 1:
-        #     rank = section_titles.index(question['section_title']) + 1
-        #     reciprocal_rank = 1 / rank
-        # else:
-        #     reciprocal_rank = 0
-        reciprocal_rank = mrr_(sections, question)  # Use the refactored mrr_ function
+        if question['answerable']:
+            # Hit@K
+            hit_at_k_score = hit_at_k(sections, question)  # Use the refactored hit_at_k function
+            # MRR
+            reciprocal_rank = mrr_(sections, question)  # Use the refactored mrr_ function
+        else:
+            hit_at_k_score = None
+            reciprocal_rank = None
 
         # Append the evaluation results for the current question
         results.append({'id': question['id'],
@@ -81,12 +76,12 @@ def _compute_rag_metrics(results):
     scores['answerability_accuracy'] = round(answerability_score / len(results), 3)
 
     # Compute Hit@K accuracy
-    hit_at_k_score = sum(result['hit_at_k_score'] for result in results)
-    scores['hit_at_k_accuracy'] = round(hit_at_k_score / len(results), 3)
+    hit_at_k_score = sum(result['hit_at_k_score'] for result in results if result['hit_at_k_score'] is not None)
+    scores['hit_at_k_accuracy'] = round(hit_at_k_score / len([r for r in results if r['hit_at_k_score'] is not None]), 3)
 
     # Compute Mean Reciprocal Rank (MRR)
-    total_reciprocal_rank = sum(result['reciprocal_rank'] for result in results)
-    scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len(results), 3)
+    total_reciprocal_rank = sum(result['reciprocal_rank'] for result in results if result['reciprocal_rank'] is not None)
+    scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len([r for r in results if r['reciprocal_rank'] is not None]), 3)
 
     # Compute semantic answer sufficiency at K
     total_hits = sum(result['hit'] for result in results)
