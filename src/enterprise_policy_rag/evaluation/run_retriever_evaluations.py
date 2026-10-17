@@ -22,7 +22,7 @@ def evaluate_retriever_configs(vector_store):
         # Create the retriever with the specified parameters
         retriever = create_retriever(vector_store, **retriever_params)
 
-        # Evaluate hit@k and MRR
+        # Evaluate Hit@K, MRR, and semantic sufficiency
         hit_at_k_score, hit_at_k_records = hit_at_k_section(TEST_CASES, retriever)
         mrr_score, mrr_records = mrr(TEST_CASES, retriever)
         semantic_answer_sufficiency_score, semantic_answer_sufficiency_records = semantic_answer_sufficiency_at_k(TEST_CASES, retriever)
