@@ -41,7 +41,8 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
         # Append the evaluation results for the current question
         results.append({'id': question['id'],
                         'question': question['question'],
-                        'answer': response['answer'],
+                        'generated_answer': response['answer'],
+                        'expected_answer': question['answer'],
                         'predicted_answerable': response['answerable'],
                         'expected_answerable': question['answerable'],
                         'best_score': best_score,
