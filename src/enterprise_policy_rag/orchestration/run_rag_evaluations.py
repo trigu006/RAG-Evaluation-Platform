@@ -26,15 +26,6 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
         # Invoke generator to generate answer based on retrieved sections
         response = generate_answer(sections, generator, question['question'])
 
-        # Assess retriever performance
-        # expected_vector = embedding_model.embed_query(question['answer'])
-        # chunk_vectors = embedding_model.embed_documents([section.page_content for section in sections])
-
-        # Compute cosine similarity between expected vector and chunk vectors
-        # cos_sim = cosine_similarity([expected_vector], chunk_vectors)[0]
-        # best_score = max(cos_sim, default=0.0)
-        # hit = int(best_score >= THRESHOLD)
-
         if question['answerable']:
             # Hit@K
             hit_at_k_score = hit_at_k(sections, question)  # Use the refactored hit_at_k function
