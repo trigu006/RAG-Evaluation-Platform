@@ -15,7 +15,7 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
         dict: A dictionary containing the evaluation results for the RAG system.
     """
     from langchain_chroma.vectorstores import cosine_similarity
-    from src.enterprise_policy_rag.evaluation.retrieval import hit_at_k, mrr_
+    from src.enterprise_policy_rag.evaluation.retrieval import hit_at_k, mrr_, semantic_answer_sufficiency_at_k_
 
     results = []
 
@@ -27,22 +27,26 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
         response = generate_answer(sections, generator, question['question'])
 
         # Assess retriever performance
-        expected_vector = embedding_model.embed_query(question['answer'])
-        chunk_vectors = embedding_model.embed_documents([section.page_content for section in sections])
+        # expected_vector = embedding_model.embed_query(question['answer'])
+        # chunk_vectors = embedding_model.embed_documents([section.page_content for section in sections])
 
         # Compute cosine similarity between expected vector and chunk vectors
-        cos_sim = cosine_similarity([expected_vector], chunk_vectors)[0]
-        best_score = max(cos_sim, default=0.0)
-        hit = int(best_score >= THRESHOLD)  # Using the provided threshold for sufficiency
+        # cos_sim = cosine_similarity([expected_vector], chunk_vectors)[0]
+        # best_score = max(cos_sim, default=0.0)
+        # hit = int(best_score >= THRESHOLD)
 
         if question['answerable']:
             # Hit@K
             hit_at_k_score = hit_at_k(sections, question)  # Use the refactored hit_at_k function
             # MRR
             reciprocal_rank = mrr_(sections, question)  # Use the refactored mrr_ function
+            # Semantic Answer Sufficiency at K
+            best_score, hit = semantic_answer_sufficiency_at_k_(sections, question, embedding_model, THRESHOLD)  # Use the refactored function
         else:
             hit_at_k_score = None
             reciprocal_rank = None
+            best_score = None
+            hit = None
 
         # Append the evaluation results for the current question
         results.append({'id': question['id'],
@@ -85,7 +89,9 @@ def _compute_rag_metrics(results):
     scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len(answerable_results), 3)
 
     # Compute semantic answer sufficiency at K
-    total_hits = sum(result['hit'] for result in results)
-    scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(results), 3)
+    # total_hits = sum(result['hit'] for result in results)
+    # scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(results), 3)
+    total_hits = sum(result['hit'] for result in answerable_results)
+    scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(answerable_results), 3) if len(answerable_results) > 0 else 0.0
 
     return scores

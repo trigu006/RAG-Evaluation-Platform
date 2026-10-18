@@ -157,3 +157,43 @@ def mrr_(sections, question) -> float:
         return 1 / rank
     else:
         return 0.0
+
+def semantic_answer_sufficiency_at_k_(sections, question, embedding_model = None, threshold = 0.75) -> tuple[float, int]:
+    """
+    Computes the semantic answer sufficiency at k metric, given a single question and set of sections from the retriever.
+
+    Args:
+        sections (list): A list of sections retrieved for the question.
+        question (dict): A question dictionary containing an 'id' and 'answer' key.
+        embedding_model: The embedding model used to encode the answers and predictions.
+        threshold (float): The similarity threshold for determining answer sufficiency.
+
+    Returns:
+        tuple[float, int]: A tuple containing the best score and hit (1 if sufficient, 0 otherwise).
+    """
+
+    # Instantiate the embedding model to encode the answers
+    if embedding_model is None:
+        embedding_model = get_embedding_model(
+            model_name="embeddinggemma"
+        )
+
+    answer = question["answer"]
+
+    # Encode the answer to get its vector representation
+    expected_vector = embedding_model.embed_query(answer)
+
+    chunk_vectors = embedding_model.embed_documents(
+        [section.page_content for section in sections]
+    )
+
+    # Calculate cosine similarity between the expected answer vector and each of the chunk vectors
+    similarities = cosine_similarity(
+        [expected_vector],
+        chunk_vectors
+    )[0]
+
+    best_score = max(similarities, default=0.0)
+    hit = int(best_score >= threshold)  # Using the provided threshold for sufficiency
+
+    return best_score, hit
