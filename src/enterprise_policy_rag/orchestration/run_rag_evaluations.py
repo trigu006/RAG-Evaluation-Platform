@@ -14,7 +14,6 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
     Returns:
         dict: A dictionary containing the evaluation results for the RAG system.
     """
-    from langchain_chroma.vectorstores import cosine_similarity
     from src.enterprise_policy_rag.evaluation.retrieval import hit_at_k, mrr_, semantic_answer_sufficiency_at_k_
 
     results = []
@@ -64,23 +63,26 @@ def _compute_rag_metrics(results):
     Returns:
         dict: A dictionary containing the computed evaluation metrics for the RAG system.
     """
+    if not results:
+        return {}
+
     scores = {}
     answerable_results = [result for result in results if result['hit_at_k_score'] is not None and result['reciprocal_rank'] is not None]
 
     # Compute answerability accuracy
     answerability_score = sum(1 for result in results if result['predicted_answerable'] == result['expected_answerable'])
-    scores['answerability_accuracy'] = round(answerability_score / len(results), 3)
+    scores['answerability_accuracy'] = (round(answerability_score / len(results), 3) if results else 0.0)
 
     # Compute Hit@K accuracy
     hit_at_k_score = sum(result['hit_at_k_score'] for result in results if result['hit_at_k_score'] is not None)
-    scores['hit_at_k_accuracy'] = round(hit_at_k_score / len(answerable_results), 3)
+    scores['hit_at_k_accuracy'] = (round(hit_at_k_score / len(answerable_results), 3) if answerable_results else 0.0)
 
     # Compute Mean Reciprocal Rank (MRR)
     total_reciprocal_rank = sum(result['reciprocal_rank'] for result in results if result['reciprocal_rank'] is not None)
-    scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len(answerable_results), 3)
+    scores['mean_reciprocal_rank'] = (round(total_reciprocal_rank / len(answerable_results), 3) if answerable_results else 0.0)
 
     # Compute semantic answer sufficiency at K
     total_hits = sum(result['hit'] for result in answerable_results)
-    scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(answerable_results), 3) if len(answerable_results) > 0 else 0.0
+    scores['semantic_answer_sufficiency_at_k'] = (round(total_hits / len(answerable_results), 3) if answerable_results else 0.0)
 
     return scores
