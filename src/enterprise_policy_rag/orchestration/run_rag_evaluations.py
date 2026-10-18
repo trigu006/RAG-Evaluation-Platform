@@ -80,8 +80,6 @@ def _compute_rag_metrics(results):
     scores['mean_reciprocal_rank'] = round(total_reciprocal_rank / len(answerable_results), 3)
 
     # Compute semantic answer sufficiency at K
-    # total_hits = sum(result['hit'] for result in results)
-    # scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(results), 3)
     total_hits = sum(result['hit'] for result in answerable_results)
     scores['semantic_answer_sufficiency_at_k'] = round(total_hits / len(answerable_results), 3) if len(answerable_results) > 0 else 0.0
 
