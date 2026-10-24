@@ -12,18 +12,32 @@ def add_human_correctness(results, human_correctness_dict: dict = None):
         list: The updated list of results with human correctness information added.
     """
     if human_correctness_dict is None:
-        for result in results[0]:
-            print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Expected Answer: {result['expected_answer']}")
-            result['human_correctness'] = input("Enter human correctness value for question [0, 1, 2]: ")  # or some default value if not found
+        for result in results:
+            if not result['expected_answerable']:
+                result['human_correctness'] = None
+            else:
+                print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Expected Answer: {result['expected_answer']}")
+                score = input("Enter human correctness value for question [0, 1, 2]: ")
+                while score not in ['0', '1', '2']:
+                    print("Invalid input. Please enter 0, 1, or 2.")
+                    score = input("Enter human correctness value for question [0, 1, 2]: ")
+                result['human_correctness'] = int(score)
     else:
         # Since 'results' is a list of two elements (results[0] and results[1]), we need to iterate over the first element (results[0]) to add human correctness information.
-        for result in results[0]:
-            question_id = result['id']
-            if question_id in human_correctness_dict:
-                result['human_correctness'] = human_correctness_dict[question_id]
+        for result in results:
+            if not result['expected_answerable']:
+                result['human_correctness'] = None
             else:
-                print("Question ID not found in human_correctness_dict. Please provide a value.")
-                print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Expected Answer: {result['expected_answer']}")
-                result['human_correctness'] = input("Enter human correctness value for question [0, 1, 2]: ")  # or some default value if not found
-    
+                question_id = result['id']
+                if question_id in human_correctness_dict:
+                    result['human_correctness'] = human_correctness_dict[question_id]
+                else:
+                    print("Question ID not found in human_correctness_dict. Please provide a value.")
+                    print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Expected Answer: {result['expected_answer']}")
+                    score = input("Enter human correctness value for question [0, 1, 2]: ")
+                    while score not in ['0', '1', '2']:
+                        print("Invalid input. Please enter 0, 1, or 2.")
+                        score = input("Enter human correctness value for question [0, 1, 2]: ")
+                    result['human_correctness'] = int(score)  # or some default value if not found
+
     return results
