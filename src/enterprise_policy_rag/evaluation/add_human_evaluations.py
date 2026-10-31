@@ -23,7 +23,6 @@ def add_human_correctness(results, human_correctness_dict: dict = None):
                     score = input("Enter human correctness value for question [0, 1, 2]: ")
                 result['human_correctness'] = int(score)
     else:
-        # Since 'results' is a list of two elements (results[0] and results[1]), we need to iterate over the first element (results[0]) to add human correctness information.
         for result in results:
             if not result['expected_answerable']:
                 result['human_correctness'] = None
@@ -65,7 +64,6 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
                     score = input("Enter human faithfulness value for question [0, 1, 2]: ")
                 result['human_faithfulness'] = int(score)
     else:
-        # Since 'results' is a list of two elements (results[0] and results[1]), we need to iterate over the first element (results[0]) to add human faithfulness information.
         for result in results:
             if not result['expected_answerable'] and not result['predicted_answerable']:
                 result['human_faithfulness'] = None
@@ -83,3 +81,23 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
                     result['human_faithfulness'] = int(score)  # or some default value if not found
 
     return results
+
+def compute_human_metrics(results):
+    """
+    Compute human evaluation metrics for the given results.
+    
+    Args:
+        results (list): A list of result dictionaries containing human correctness and faithfulness scores.
+
+    Returns:
+        dict: A dictionary containing the average human correctness and faithfulness scores.
+    """
+
+    # Create array of scores
+    correctness_scores = [result['human_correctness'] for result in results if result['human_correctness'] is not None]
+    faithfulness_scores = [result['human_faithfulness'] for result in results if result['human_faithfulness'] is not None]
+
+    return {
+        "human_correctness": round(sum(correctness_scores) / (2 * len(correctness_scores)), 2),
+        "human_faithfulness": round(sum(faithfulness_scores) / (2 * len(faithfulness_scores)), 2)
+    }
