@@ -29,7 +29,16 @@ def add_human_correctness(results, human_correctness_dict: dict = None):
             else:
                 question_id = result['id']
                 if question_id in human_correctness_dict:
-                    result['human_correctness'] = human_correctness_dict[question_id]
+                    if human_correctness_dict[question_id] in [0, 1, 2]:
+                        result['human_correctness'] = human_correctness_dict[question_id]
+                    else:
+                        print("Invalid human-correctness value in human_correctness_dict. Please enter a value of 0, 1, or 2.")
+                        print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Expected Answer: {result['expected_answer']}")
+                        score = input("Enter human correctness value for question [0, 1, 2]: ")
+                        while score not in ['0', '1', '2']:
+                            print("Invalid input. Please enter 0, 1, or 2.")
+                            score = input("Enter human correctness value for question [0, 1, 2]: ")
+                        result['human_correctness'] = int(score)
                 else:
                     print("Question ID not found in human_correctness_dict. Please provide a value.")
                     print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Expected Answer: {result['expected_answer']}")
@@ -70,7 +79,16 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
             else:
                 question_id = result['id']
                 if question_id in human_faithfulness_dict:
-                    result['human_faithfulness'] = human_faithfulness_dict[question_id]
+                    if human_faithfulness_dict[question_id] in [0, 1, 2]:
+                        result['human_faithfulness'] = human_faithfulness_dict[question_id]
+                    else:
+                        print("Invalid human-faithfulness value in human_faithfulness_dict. Please enter a value of 0, 1, or 2.")
+                        print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Sections: {result['sections']}")
+                        score = input("Enter human faithfulness value for question [0, 1, 2]: ")
+                        while score not in ['0', '1', '2']:
+                            print("Invalid input. Please enter 0, 1, or 2.")
+                            score = input("Enter human faithfulness value for question [0, 1, 2]: ")
+                        result['human_faithfulness'] = int(score)
                 else:
                     print("Question ID not found in human_faithfulness_dict. Please provide a value.")
                     print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Sections: {result['sections']}")
@@ -98,6 +116,6 @@ def compute_human_metrics(results):
     faithfulness_scores = [result['human_faithfulness'] for result in results if result['human_faithfulness'] is not None]
 
     return {
-        "human_correctness": round(sum(correctness_scores) / (2 * len(correctness_scores)), 2),
-        "human_faithfulness": round(sum(faithfulness_scores) / (2 * len(faithfulness_scores)), 2)
+        "human_correctness": round(sum(correctness_scores) / (2 * len(correctness_scores)), 3) if correctness_scores else 0.0,
+        "human_faithfulness": round(sum(faithfulness_scores) / (2 * len(faithfulness_scores)), 3) if faithfulness_scores else 0.0
     }

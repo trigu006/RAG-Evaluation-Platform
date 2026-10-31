@@ -2,7 +2,8 @@ from src.enterprise_policy_rag.generator.generate_answer import generate_answer
 
 THRESHOLD = 0.8
 
-def run_rag_evaluations(retriever, generator, questions, embedding_model, human_correctness_dict=None, human_faithfulness_dict=None):
+#def run_rag_evaluations(retriever, generator, questions, embedding_model, human_correctness_dict=None, human_faithfulness_dict=None):
+def run_rag_evaluations(retriever, generator, questions, embedding_model):
     """
     Run evaluations for the RAG system based on a set of questions.
 
@@ -52,14 +53,14 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model, human_
                         'reciprocal_rank': reciprocal_rank,
                         'sections': sections})
         
-    results = add_human_correctness(results, human_correctness_dict)
-    results = add_human_faithfulness(results, human_faithfulness_dict)
-    human_scores = compute_human_metrics(results)
+    #results = add_human_correctness(results, human_correctness_dict)
+    #results = add_human_faithfulness(results, human_faithfulness_dict)
+    #human_scores = compute_human_metrics(results)
 
     scores = _compute_rag_metrics(results)
 
-    scores['human_correctness'] = human_scores['human_correctness']
-    scores['human_faithfulness'] = human_scores['human_faithfulness']
+    #scores['human_correctness'] = human_scores['human_correctness']
+    #scores['human_faithfulness'] = human_scores['human_faithfulness']
 
     return results, scores
 
