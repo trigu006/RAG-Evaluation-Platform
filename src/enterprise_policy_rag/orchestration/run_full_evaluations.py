@@ -24,7 +24,6 @@ def run_full_evaluations(retriever, generator, questions, embedding_model, human
     results = add_human_faithfulness(results, human_faithfulness_dict)
     human_metrics = compute_human_metrics(results)
 
-    scores['human_correctness'] = human_metrics['human_correctness']
-    scores['human_faithfulness'] = human_metrics['human_faithfulness']
+    scores.update(human_metrics)
 
     return results, scores
