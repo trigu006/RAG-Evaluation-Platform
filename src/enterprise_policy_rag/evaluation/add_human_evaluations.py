@@ -55,7 +55,7 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
     """
     if human_faithfulness_dict is None:
         for result in results:
-            if not result['expected_answerable']:
+            if not result['expected_answerable'] and not result['predicted_answerable']:
                 result['human_faithfulness'] = None
             else:
                 print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Sections: {result['sections']}")
@@ -67,7 +67,7 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
     else:
         # Since 'results' is a list of two elements (results[0] and results[1]), we need to iterate over the first element (results[0]) to add human faithfulness information.
         for result in results:
-            if not result['expected_answerable']:
+            if not result['expected_answerable'] and not result['predicted_answerable']:
                 result['human_faithfulness'] = None
             else:
                 question_id = result['id']
