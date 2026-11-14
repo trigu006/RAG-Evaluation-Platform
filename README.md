@@ -46,6 +46,11 @@ The objective is to provide an employee-facing assistant that can answer HR ques
 ├── README.md
 ├── requirements.txt
 ├── pyproject.toml
+├── tests
+│   ├── test_failure_attributions.py    # Test failure classifications
+│   ├── test_human_evaluations.py       # Test human evaluations
+│   ├── test_orchestration.py           # Test orchestration
+│   └── test_retrieval_metrics.py       # Test retrieval metrics
 ├── test.ipynb                   # exploratory notebook / validation work
 └── .gitignore
 ```
@@ -71,6 +76,9 @@ The evaluation workflow measures:
 - MRR: how early the correct section appears in ranked retrieval results
 - Semantic answer sufficiency: whether retrieved passages are semantically close to the expected answer
 - Answerability accuracy: whether the system correctly recognizes when a question cannot be answered from policy text
+- Faithfulness: whether the generator adheres to the information presented in the sections from the retriever
+- Correctness: whether the generator's response is correct
+- Failure attribution: which component is associated with an incorrect response
 
 ## Key Components
 
