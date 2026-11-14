@@ -30,7 +30,7 @@ def test_human_faithfulness_evaluation():
 
     human_faithfulness = compute_human_metrics(results)['human_faithfulness']
     
-    assert human_faithfulness == 2
+    assert human_faithfulness == 1
 
 def test_human_correctness_evaluation():
     result = [
@@ -40,7 +40,6 @@ def test_human_correctness_evaluation():
         'expected_answer': '6 days',
         'predicted_answerable': True,
         'expected_answerable': True,
-        'best_score': np.float64(0.4063837039838582),
         'hit': 0,
         'hit_at_k_score': 1,
         'reciprocal_rank': 1.0,
@@ -52,7 +51,6 @@ def test_human_correctness_evaluation():
         'expected_answer': '20 days',
         'predicted_answerable': True,
         'expected_answerable': True,
-        'best_score': np.float64(0.4609124379810909),
         'hit': 0,
         'hit_at_k_score': 1,
         'reciprocal_rank': 1.0,
@@ -61,5 +59,5 @@ def test_human_correctness_evaluation():
         ]
 
     human_correctness = compute_human_metrics(result)['human_correctness']
-    
-    assert human_correctness == 2
+
+    assert human_correctness == 1

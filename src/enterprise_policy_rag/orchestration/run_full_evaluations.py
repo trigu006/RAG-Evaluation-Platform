@@ -1,4 +1,5 @@
-
+from src.enterprise_policy_rag.evaluation.add_human_evaluations import add_human_correctness, add_human_faithfulness, compute_human_metrics
+from src.enterprise_policy_rag.orchestration.run_rag_evaluations import run_rag_evaluations
 
 def run_full_evaluations(retriever, generator, questions, embedding_model, human_correctness_dict=None, human_faithfulness_dict=None):
     """
@@ -15,8 +16,6 @@ def run_full_evaluations(retriever, generator, questions, embedding_model, human
     Returns:
         tuple: A tuple containing the updated results and computed human metrics.
     """
-    from src.enterprise_policy_rag.evaluation.add_human_evaluations import add_human_correctness, add_human_faithfulness, compute_human_metrics
-    from src.enterprise_policy_rag.orchestration.run_rag_evaluations import run_rag_evaluations
 
     results, scores = run_rag_evaluations(retriever, generator, questions, embedding_model)
     

@@ -1,4 +1,5 @@
 from src.enterprise_policy_rag.generator.generate_answer import generate_answer
+from src.enterprise_policy_rag.evaluation.retrieval import hit_at_k, mrr_, semantic_answer_sufficiency_at_k_
 
 THRESHOLD = 0.8
 
@@ -14,7 +15,6 @@ def run_rag_evaluations(retriever, generator, questions, embedding_model):
     Returns:
         tuple: A tuple containing the evaluation results and computed metrics for the RAG system.
     """
-    from src.enterprise_policy_rag.evaluation.retrieval import hit_at_k, mrr_, semantic_answer_sufficiency_at_k_
 
     results = []
 
