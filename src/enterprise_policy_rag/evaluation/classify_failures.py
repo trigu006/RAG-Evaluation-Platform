@@ -15,15 +15,22 @@ def classify_failures(result):
     # SECTION: Unanswerable questions
     # Handle questions that are not expected to be answerable.
     if not result['expected_answerable']:
-        return "Success - Correct abstention" if not result['predicted_answerable'] else "Failure - No abstention"
+        return "correct_abstention" if not result['predicted_answerable'] else "failed_abstention"
 
     # SECTION: Answerable questions
     # Return incorrect abstention if the generator did not answer an answerable question.
     if not result['predicted_answerable']:
-        return "Failure - Incorrect abstention"
+        return "incorrect_abstention"
 
     # Retriever errors
     if result['hit_at_k_score'] == 0:
-        return "Failure - Retriever did not retrieve relevant documents"
+        return "retriever_failure"
 
-    return "Success"
+    # Generator errors
+    if result['human_faithfulness'] < 2:
+        return "generator_faithfulness_failure"
+
+    if result['human_correctness'] < 2:
+        return "generator_correctness_failure"
+
+    return "success"
