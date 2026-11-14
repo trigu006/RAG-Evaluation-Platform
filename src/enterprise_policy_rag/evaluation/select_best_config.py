@@ -107,7 +107,6 @@ def _calculate_deltas(results, best_config):
 
         # Calculate the difference in scores for each metric
         deltas[config_name ]['absolute'] = {
-            # metric: config_results["overall_scores"][metric] - best_config["scores"][metric]
             metric: best_config["scores"][metric] -config_results["overall_scores"][metric]
             for metric in best_config["scores"]
         }

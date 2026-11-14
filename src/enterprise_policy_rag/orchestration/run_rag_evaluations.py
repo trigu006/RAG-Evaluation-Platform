@@ -2,7 +2,6 @@ from src.enterprise_policy_rag.generator.generate_answer import generate_answer
 
 THRESHOLD = 0.8
 
-#def run_rag_evaluations(retriever, generator, questions, embedding_model, human_correctness_dict=None, human_faithfulness_dict=None):
 def run_rag_evaluations(retriever, generator, questions, embedding_model):
     """
     Run evaluations for the RAG system based on a set of questions.
