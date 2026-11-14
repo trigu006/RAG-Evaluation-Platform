@@ -1,5 +1,5 @@
 """
-Classifies evaluation results based on predicted answerability and human faithfulness.
+    Classifies evaluation results based on predicted answerability and human faithfulness.
 """
 
 def classify_failures(result):
@@ -12,11 +12,18 @@ def classify_failures(result):
     Returns:
         str: A string representing the classification of the failure.
     """
+    # SECTION: Unanswerable questions
     # Handle questions that are not expected to be answerable.
     if not result['expected_answerable']:
-        return "Correct abstention" if not result['predicted_answerable'] else "Failed abstention"
+        return "Success - Correct abstention" if not result['predicted_answerable'] else "Failure - No abstention"
 
+    # SECTION: Answerable questions
     # Return incorrect abstention if the generator did not answer an answerable question.
     if not result['predicted_answerable']:
-        return "Incorrect abstention"
-    
+        return "Failure - Incorrect abstention"
+
+    # Retriever errors
+    if result['hit_at_k_score'] == 0:
+        return "Failure - Retriever did not retrieve relevant documents"
+
+    return "Success"
