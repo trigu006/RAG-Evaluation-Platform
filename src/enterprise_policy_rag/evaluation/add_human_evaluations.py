@@ -63,7 +63,7 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
     """
     if human_faithfulness_dict is None:
         for result in results:
-            if not result['expected_answerable'] and not result['predicted_answerable']:
+            if not result['predicted_answerable']:
                 result['human_faithfulness'] = None
             else:
                 print(f"Question ID: {result['id']}, Question: {result['question']}, Generated Answer: {result['generated_answer']}, Sections: {result['sections']}")
@@ -74,7 +74,7 @@ def add_human_faithfulness(results, human_faithfulness_dict: dict = None):
                 result['human_faithfulness'] = int(score)
     else:
         for result in results:
-            if not result['expected_answerable'] and not result['predicted_answerable']:
+            if not result['predicted_answerable']:
                 result['human_faithfulness'] = None
             else:
                 question_id = result['id']

@@ -1,4 +1,8 @@
+chromadb
 langchain-chroma
+langchain-core
 langchain-ollama
 langchain-text-splitters
+numpy
 pandas
+pydantic
